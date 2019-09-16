@@ -55,6 +55,31 @@ class ComplainController extends Controller
                     'result' => $asd
                 ]);
     }
+    public function laporanstatus($name)
+    {
+        $laporall = Ticket::select(DB::raw('ticketit.id,ticketit.subject,ticketit.content as keluhan,ticketit.html as keluhan_html_format, ticketit_statuses.name as status, users.name as pelapor, ticketit_categories.name as kategori, ticketit.created_at, ticketit.updated_at'))
+                    ->leftJoin('ticketit_statuses', 'ticketit.status_id', '=', 'ticketit_statuses.id')
+                    ->leftJoin('users', 'ticketit.user_id', '=', 'users.id')
+                    ->leftJoin('ticketit_categories', 'ticketit.category_id', '=', 'ticketit_categories.id')
+                    ->where('ticketit_statuses.name', $name)
+                    ->get();
+                    $urlgambar = url('/') . '/images/';
+                    $bsd = array('urlgambar'=>$urlgambar);
+
+                    foreach ($laporall as $p) {
+
+                        $l = Image::select('image')
+                                  ->where('ticket_id', $p->id)
+                                  ->get();
+
+                  $asd[] = array('keluhan'=>$p, 'lampiran'=>$l);
+
+                  }
+                  return response()->json([
+                    'urlimg' => $urlgambar,
+                    'result' => $asd
+                ]);
+    }
     /**
      * Show the form for creating a new resource.
      *
