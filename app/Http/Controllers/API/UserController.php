@@ -1,9 +1,11 @@
 <?php
-namespace App\Http\Controllers\API;use Illuminate\Http\Request; 
+namespace App\Http\Controllers\API;
+use Illuminate\Http\Request; 
 use App\Http\Controllers\Controller; 
 use App\User; 
 use Illuminate\Support\Facades\Auth; 
-use Validator;class UserController extends Controller 
+use Validator;
+class UserController extends Controller 
 {
 public $successStatus = 200;/** 
      * login api 
@@ -17,7 +19,7 @@ public $successStatus = 200;/**
             return response()->json(['success' => $success], $this-> successStatus); 
         } 
         else{ 
-            return response()->json(['error'=>'Unauthorised'], 401); 
+            return response()->json(['error'=>'Unauthorized'], 401); 
         } 
     }
 /** 

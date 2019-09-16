@@ -18,5 +18,9 @@ Route::post('pregister', 'API\UserController@register');
 //     return $request->user();
 // });
 Route::group(['middleware' => 'auth:api'], function(){
+    Route::post('keluhan/all', 'API\ComplainController@laporanall');
+    Route::post('keluhan/new', 'API\ComplainController@newcomp');
     Route::post('details', 'API\UserController@details');
+    Route::post('keluhan/baru', '\Kordy\Ticketit\Controllers\TicketsController@jsonstore');
+    Route::get('showkeluhan/{id}', '\Kordy\Ticketit\Controllers\TicketsController@jsonshow');
     });

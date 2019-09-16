@@ -10,7 +10,7 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('/api/keluhan/all', 'AllpiController@laporanall');
+// Route::get('/api/keluhan/all', 'AllpiController@laporanall');
 Route::get('/ssologin', 'LoginssoController@index');
 Route::get('/api/ssologin', 'LoginssoController@login');
 Route::get('/ssologout', 'LoginssoController@logout');
