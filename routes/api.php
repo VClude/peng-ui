@@ -17,9 +17,14 @@ Route::post('pregister', 'API\UserController@register');
 // Route::middleware('auth:api')->get('/user', function (Request $request) {
 //     return $request->user();
 // });
+Route::get('kategori', 'API\ComplainController@getCategory');
+Route::get('status', 'API\ComplainController@getStatus');
+Route::get('keluhan/filter', 'API\ComplainController@getComplain');
+Route::get('keluhan/all', 'API\ComplainController@laporanall');
 Route::group(['middleware' => 'auth:api'], function(){
-    Route::get('keluhan/all', 'API\ComplainController@laporanall');
+
     Route::get('keluhan/sort/status/{name}', 'API\ComplainController@laporanstatus'); //otw
+
     Route::post('keluhan/sort/{id}', 'API\ComplainController@laporanbycat'); //otw
     Route::post('amialive', 'API\UserController@details');
     // Route::get('/amialive', function () {
