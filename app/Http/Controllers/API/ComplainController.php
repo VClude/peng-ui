@@ -72,8 +72,15 @@ class ComplainController extends LaravelController
             $limit = 100;
         }
         if($page == null){
-            $page = 0;
+            $page = 1;
         }
+        // elseif($page == 0){
+        //     $page = 1;
+        // }
+        // else{
+        //     $page++;
+        // }
+    
         $tticket = Ticket::get();
         $cticket = count($tticket);
         $urlgambar = url('/') . '/images/';
