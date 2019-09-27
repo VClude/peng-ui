@@ -13,6 +13,7 @@ use Kordy\Ticketit\Models\Setting;
 use Kordy\Ticketit\Models\Ticket;
 use Kordy\Ticketit\Models\Image;
 use Kordy\Ticketit\Models\Status;
+use App\Http\Resources\KeluhanResource;
 use Optimus\Bruno\EloquentBuilderTrait;
 use Optimus\Bruno\LaravelController;
 use DB;
@@ -37,6 +38,12 @@ class ComplainController extends LaravelController
      *
      * @return \Illuminate\Http\Response
      */
+    public function dummy()
+    {
+        return response()->json([
+            'status'    => 'not implemented'
+        ]);
+    }
     public function index()
     {
         //
@@ -97,6 +104,52 @@ class ComplainController extends LaravelController
         $parsedData = $this->parseData($ticket, $resourceOptions, 'ticket');
         $c2ticket = count($ticket);
         $meta[] = array('count' => "$c2ticket", 'page_total' => "$pt", 'total' => "$cticket", 'limit' => "$limit", 'page' => "$page");
+        
+        return response()->json([
+            'urlimg'    => $urlgambar,
+            'meta'      => $meta,
+            'results'   => $parsedData
+        ]);
+        // return $this->response($parsedData);
+    }
+
+    public function showComplain($id)
+    {
+        $limit = Input::get('limit');
+        $page = Input::get('page');
+        if($limit == null){
+            $limit = 100;
+        }
+        if($page == null){
+            $page = 1;
+        }
+        // elseif($page == 0){
+        //     $page = 1;
+        // }
+        // else{
+        //     $page++;
+        // }
+    
+        $tticket = Ticket::findOrFail($id);
+        if ($tticket){
+            $tticket = new KeluhanResource($tticket);
+        }
+        $cticket = 1;
+        $urlgambar = url('/') . '/images/';
+        $bsd = array('urlgambar'=>$urlgambar);
+
+        $pt = ceil($cticket/$limit);
+        // $pagetotal = number_format($pt, ((int) $pt == $pt ? 0 : 2), '.', ',');
+
+        $resourceOptions = $this->parseResourceOptions();
+        $query = Ticket::query();
+        $this->applyResourceOptions($query, $resourceOptions);
+        $ticket = $query->findOrFail($id);
+        // $ticket = $this->tickets->selectRaw('*,ticketit.id as t_id')->where('ticket_id',$id)->with('gambar')->first();
+        $parsedData = $this->parseData($ticket, $resourceOptions, 'ticket');
+        $c2ticket = 1;
+        $meta[] = array('count' => "$c2ticket", 'page_total' => "$pt", 'total' => "$cticket", 'limit' => "$limit", 'page' => "$page");
+        
         return response()->json([
             'urlimg'    => $urlgambar,
             'meta'      => $meta,

@@ -17,20 +17,27 @@ Route::post('pregister', 'API\UserController@register');
 // Route::middleware('auth:api')->get('/user', function (Request $request) {
 //     return $request->user();
 // });
+
+
+
 Route::get('kategori', 'API\ComplainController@getCategory');
 Route::get('status', 'API\ComplainController@getStatus');
-Route::get('keluhan/filter', 'API\ComplainController@getComplain');
-Route::get('keluhan/all', 'API\ComplainController@laporanall');
 Route::group(['middleware' => 'auth:api'], function(){
-
-    Route::get('keluhan/sort/status/{name}', 'API\ComplainController@laporanstatus'); //otw
-
-    Route::post('keluhan/sort/{id}', 'API\ComplainController@laporanbycat'); //otw
-    Route::post('amialive', 'API\UserController@details');
+    //keluhan section
+    Route::post('keluhan', '\Kordy\Ticketit\Controllers\TicketsController@jsonstore');
+    Route::get('keluhan', 'API\ComplainController@getComplain');
+    Route::get('keluhan/{id}', 'API\ComplainController@showComplain');
+    Route::get('keluhan/process/{id}', '\Kordy\Ticketit\Controllers\TicketsController@jsonProses');
+    Route::get('keluhan/complete/{id}', '\Kordy\Ticketit\Controllers\TicketsController@jsonComplete');
+    Route::get('keluhan/reopen/{id}', '\Kordy\Ticketit\Controllers\TicketsController@jsonReopen');
+    // Route::put('keluhan/{id}', 'API\ComplainController@updateComplain');
+    Route::delete('keluhan/{id}', '\Kordy\Ticketit\Controllers\TicketsController@jsondelete');
+    // Route::get('keluhan/all', 'API\ComplainController@laporanall');
+    Route::get('myaccount', 'API\UserController@details');
+    Route::put('myaccount', 'API\UserController@editUser');
     // Route::get('/amialive', function () {
     //     return ['data' => 'yes you are']; //check if token valid
     // });
-    Route::post('keluhan/baru', '\Kordy\Ticketit\Controllers\TicketsController@jsonstore');
-    Route::get('keluhan/delete/{id}', '\Kordy\Ticketit\Controllers\TicketsController@jsondelete');
-    Route::get('showkeluhan/{id}', '\Kordy\Ticketit\Controllers\TicketsController@jsonshow');
+    
+
     });
