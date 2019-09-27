@@ -99,7 +99,7 @@ class ComplainController extends LaravelController
         $resourceOptions = $this->parseResourceOptions();
         $query = Ticket::query();
         $this->applyResourceOptions($query, $resourceOptions);
-        $ticket = $query->get();
+        $ticket = $query->select('*', \DB::raw('UNIX_TIMESTAMP(created_at) AS createdunix, UNIX_TIMESTAMP(updated_at) AS updatedunix, UNIX_TIMESTAMP(completed_at) AS completedunix'))->get();
         // $ticket = $this->tickets->selectRaw('*,ticketit.id as t_id')->where('ticket_id',$id)->with('gambar')->first();
         $parsedData = $this->parseData($ticket, $resourceOptions, 'ticket');
         $c2ticket = count($ticket);
