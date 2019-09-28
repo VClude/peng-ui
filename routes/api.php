@@ -30,6 +30,8 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::get('keluhan/process/{id}', '\Kordy\Ticketit\Controllers\TicketsController@jsonProses');
     Route::get('keluhan/complete/{id}', '\Kordy\Ticketit\Controllers\TicketsController@jsonComplete');
     Route::get('keluhan/reopen/{id}', '\Kordy\Ticketit\Controllers\TicketsController@jsonReopen');
+    //comment section
+    Route::post('comments', '\Kordy\Ticketit\Controllers\CommentsController@jsonstore');
     // Route::put('keluhan/{id}', 'API\ComplainController@updateComplain');
     Route::delete('keluhan/{id}', '\Kordy\Ticketit\Controllers\TicketsController@jsondelete');
     // Route::get('keluhan/all', 'API\ComplainController@laporanall');
