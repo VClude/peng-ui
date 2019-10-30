@@ -2,8 +2,8 @@
 /public/hot
 /public/storage
 /storage/*.key
-/vendor
 !/vendor/kordy
+/vendor/*
 /.idea
 /.vscode
 /nbproject

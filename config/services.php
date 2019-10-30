@@ -13,7 +13,9 @@ return [
     | to have a conventional place to find your various credentials.
     |
     */
-
+    'fcm' => [
+        'key' => env('FCM_SECRET_KEY')
+    ],
     'mailgun' => [
         'domain' => env('MAILGUN_DOMAIN'),
         'secret' => env('MAILGUN_SECRET'),

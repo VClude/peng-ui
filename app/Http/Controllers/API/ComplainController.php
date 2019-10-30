@@ -16,6 +16,9 @@ use Kordy\Ticketit\Models\Status;
 use App\Http\Resources\KeluhanResource;
 use Optimus\Bruno\EloquentBuilderTrait;
 use Optimus\Bruno\LaravelController;
+use Carbon\Carbon;
+Use App\User;
+Use App\Categoryusers;
 use DB;
 use Validator;
 
@@ -71,8 +74,26 @@ class ComplainController extends LaravelController
     //   $asd[] = array('keluhan'=>$p, 'lampiran'=>$l);
 
     //   }
-    public function getComplain()
+    public function getMonthly(){
+        $categories_all = Category::all();
+        $month_count = [];
+        $months = ['01','02','03','04','05','06','07','08','09','10','11','12'];
+        foreach ($months as $tkt) {
+            $ads = Carbon::now()->format('Y') . '-' . $tkt;
+            $month_count[$tkt]['timestamp'] = $ads;
+            foreach ($categories_all as $cate) {
+                $month_count[$tkt][$cate->name] = Ticket::whereMonth('created_at',$tkt)->whereYear('created_at',Carbon::now()->format('Y'))->where('category_id',$cate->id)->count();
+            }
+            
+            }
+            return response()->json([
+                'monthly_report'    => $month_count
+            ]);
+    }
+
+    public function getMine()
     {
+        $userget = Auth::user();
         $limit = Input::get('limit');
         $page = Input::get('page');
         if($limit == null){
@@ -88,18 +109,17 @@ class ComplainController extends LaravelController
         //     $page++;
         // }
     
-        $tticket = Ticket::get();
+        $tticket = Ticket::where('user_id', $userget->id)->get();
         $cticket = count($tticket);
         $urlgambar = url('/') . '/images/';
         $bsd = array('urlgambar'=>$urlgambar);
-
         $pt = ceil($cticket/$limit);
         // $pagetotal = number_format($pt, ((int) $pt == $pt ? 0 : 2), '.', ',');
 
         $resourceOptions = $this->parseResourceOptions();
         $query = Ticket::query();
         $this->applyResourceOptions($query, $resourceOptions);
-        $ticket = $query->select('*', \DB::raw('UNIX_TIMESTAMP(created_at) AS createdunix, UNIX_TIMESTAMP(updated_at) AS updatedunix, UNIX_TIMESTAMP(completed_at) AS completedunix'))->get();
+        $ticket = $query->select('*', \DB::raw('UNIX_TIMESTAMP(created_at) AS createdunix, UNIX_TIMESTAMP(updated_at) AS updatedunix, UNIX_TIMESTAMP(completed_at) AS completedunix'))->where('user_id', $userget->id)->get();
         // $ticket = $this->tickets->selectRaw('*,ticketit.id as t_id')->where('ticket_id',$id)->with('gambar')->first();
         $parsedData = $this->parseData($ticket, $resourceOptions, 'ticket');
         $c2ticket = count($ticket);
@@ -113,8 +133,70 @@ class ComplainController extends LaravelController
         // return $this->response($parsedData);
     }
 
+
+
+    public function getComplain()
+    {
+        $user = Auth::user();
+        // $user = User::find($userget->id);
+        $limit = Input::get('limit');
+        $page = Input::get('page');
+        if($limit == null){
+            $limit = 100;
+        }
+        if($page == null){
+            $page = 1;
+        }
+        // elseif($page == 0){
+        //     $page = 1;
+        // }
+        // else{
+        //     $page++;
+        // }
+        
+        $resourceOptions = $this->parseResourceOptions();
+        $query = Ticket::query();
+        $this->applyResourceOptions($query, $resourceOptions);
+        if($user->ticketit_agent && !$user->ticketit_admin){
+
+
+
+            $ticketa = Categoryusers::where('user_id',$user->id)->pluck('category_id');
+            $tticket = Ticket::whereIn('category_id',$ticketa)->orderBy('created_at', 'DESC')->get();
+            $ticket = $query->select('*', \DB::raw('UNIX_TIMESTAMP(created_at) AS createdunix, UNIX_TIMESTAMP(updated_at) AS updatedunix, UNIX_TIMESTAMP(completed_at) AS completedunix'))->whereIn('category_id',$ticketa)->orderBy('created_at', 'DESC')->get();
+
+            $str = 'ticket';
+            // $ticket = $query->select('*', \DB::raw('UNIX_TIMESTAMP(created_at) AS createdunix, UNIX_TIMESTAMP(updated_at) AS updatedunix, UNIX_TIMESTAMP(completed_at) AS completedunix'))->with('tickets')->orderBy('ticketit.created_at', 'DESC')->get();
+        
+        }
+        else{
+        $tticket = Ticket::get();
+        $ticket = $query->select('*', \DB::raw('UNIX_TIMESTAMP(created_at) AS createdunix, UNIX_TIMESTAMP(updated_at) AS updatedunix, UNIX_TIMESTAMP(completed_at) AS completedunix'))->orderBy('created_at', 'DESC')->get();
+        $str = 'ticket';
+        }
+        $cticket = count($tticket);
+        $urlgambar = url('/') . '/images/';
+        $bsd = array('urlgambar'=>$urlgambar);
+        $pt = ceil($cticket/$limit);
+        // $pagetotal = number_format($pt, ((int) $pt == $pt ? 0 : 2), '.', ',');
+
+
+        // $ticket = $this->tickets->selectRaw('*,ticketit.id as t_id')->where('ticket_id',$id)->with('gambar')->first();
+        $parsedData = $this->parseData($ticket, $resourceOptions, $str);
+        $c2ticket = count($ticket);
+        $meta[] = array('count' => "$c2ticket", 'page_total' => "$pt", 'total' => "$cticket", 'limit' => "$limit", 'page' => "$page");
+        
+        return response()->json([
+            'urlimg'    => $urlgambar,
+            'meta'      => $meta,
+            'results'   => $parsedData
+        ]);
+        // return $this->response($parsedData);
+    }
+
     public function showComplain($id)
     {
+        
         $limit = Input::get('limit');
         $page = Input::get('page');
         if($limit == null){
@@ -149,11 +231,12 @@ class ComplainController extends LaravelController
         $parsedData = $this->parseData($ticket, $resourceOptions, 'ticket');
         $c2ticket = 1;
         $meta[] = array('count' => "$c2ticket", 'page_total' => "$pt", 'total' => "$cticket", 'limit' => "$limit", 'page' => "$page");
-        
+        $surveyor = Categoryusers::where('category_id', $ticket->category_id)->with('useres')->get()->pluck('useres.firebasetoken');
         return response()->json([
             'urlimg'    => $urlgambar,
             'meta'      => $meta,
-            'results'   => $parsedData
+            'results'   => $parsedData,
+            'surveyor'  => $surveyor
         ]);
         // return $this->response($parsedData);
     }
@@ -162,7 +245,23 @@ class ComplainController extends LaravelController
         $resourceOptions = $this->parseResourceOptions();
         $query = Category::query();
         $this->applyResourceOptions($query, $resourceOptions);
-        $ticket = $query->get();
+        
+        $opt = Input::get('filterbyname');
+        if($opt == null){
+            $ticket = $query->get();
+        }
+        elseif(!is_array($opt)){
+            return response()->json([
+                'error'    => 'showcat must be array with value'
+            ]);
+
+        }
+     
+        else{
+            $ticket = $query->whereIn('name', $opt)->get();
+        }
+    
+     
         $parsedData = $this->parseData($ticket, $resourceOptions, 'ticket');
         
         return $this->response($parsedData);

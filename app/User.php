@@ -36,4 +36,40 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+    public function surveyor()
+    {
+        return $this->hasMany('\Kordy\Ticketit\Models\Agent', 'ticketit_categories_users', 'user_id');
+    }
+    public static function isAgent($id)
+    {
+        if (isset($id)) {
+            $user = User::find($id);
+            if ($user->ticketit_agent) {
+                return true;
+            }
+
+            return false;
+        }
+        if (auth()->check()) {
+            if (auth()->user()->ticketit_agent) {
+                return true;
+            }
+        }
+    }
+    public static function isAdmine($id)
+    {
+        if (isset($id)) {
+            $user = User::find($id);
+            if ($user->ticketit_admin) {
+                return true;
+            }
+
+            return false;
+        }
+        if (auth()->check()) {
+            if (auth()->user()->ticketit_admin) {
+                return true;
+            }
+        }
+    }    
 }

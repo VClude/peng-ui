@@ -1,12 +1,17 @@
 <?php
+use Laravel\Passport\Token;
 namespace App\Http\Controllers\API;
 use Illuminate\Http\Request; 
 use App\Http\Controllers\Controller; 
 use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Hash;
 use App\User; 
+use App\Categoryusers;
+use Kordy\Ticketit\Models\Category;
 use Illuminate\Support\Facades\Auth; 
 use Validator;
+use Carbon\Carbon;
+use DB;
 class UserController extends Controller 
 {
 public $successStatus = 200;/** 
@@ -15,13 +20,29 @@ public $successStatus = 200;/**
      * @return \Illuminate\Http\Response 
      */ 
     public function login(){ 
-        if(Auth::attempt(['email' => request('email'), 'password' => request('password')])){ 
+        if(Auth::attempt(['email' => request('email'), 'password' => request('password')]) || Auth::attempt(['noidentitas' => request('email'), 'password' => request('password')])){ 
             $user = Auth::user(); 
+            $surveyor = Categoryusers::select('*')
+            ->leftJoin('ticketit_categories', 'ticketit_categories_users.category_id', '=', 'ticketit_categories.id')
+            ->where('user_id', $user->id)
+            ->get()->pluck('name');
             $success['token'] =  $user->createToken('MyApp')-> accessToken; 
-            return response()->json(
-                ['success' => $success,
-                 'credentials' => $user], $this-> successStatus); 
+            if($user->ticketit_admin == 1 || $user->ticketit_agent == 1){
+                return response()->json(
+                    ['success' => $success,
+                     'credentials' => $user,
+                     'surveyor' => $surveyor], $this-> successStatus); 
+                     Log::alert('Manager/Surveyor ' . $user->name . ' Logged in : ' . CarbonImmutable::now());
+            }
+            else{
+                return response()->json(
+                    ['success' => $success,
+                     'credentials' => $user], $this-> successStatus); 
+                     Log::alert('Mahasiswa ' . $user->name . ' Logged in : ' . CarbonImmutable::now());
+            }
+
         } 
+
         else{ 
             return response()->json(['error'=>'Unauthorized'], 401); 
         } 
@@ -59,7 +80,17 @@ return response()->json(['success'=>$success], $this-> successStatus);
     public function details() 
     { 
         $user = Auth::user(); 
-        return response()->json(['message' => 'Authenticated', 'success' => $user], $this-> successStatus); 
+        $surveyor = Categoryusers::select('*')
+        ->where('user_id', $user->id)
+        ->with('details')
+        ->get();
+        // if ($user->ticketit_agent == 1){
+            // $agent = 
+            // return response()->json(['message' => 'Authenticated', 'success' => $user,'surveyor' => ], $this-> successStatus); 
+        // }
+        // else{
+            return response()->json(['message' => 'Authenticated', 'success' => $user, 'surveyor' => $surveyor], $this-> successStatus); 
+        // }
     } 
     public function editUser(Request $request) 
     { 
@@ -89,6 +120,35 @@ return response()->json(['success'=>$success], $this-> successStatus);
         else{
             return response()->json(['message' => 'Old Password not match'], 401); 
         }
+
+    } 
+
+    public function updateToken(Request $request) 
+    { 
+        $validator = Validator::make($request->all(), [ 
+            "token" => 'required'
+        ]);
+        $userget = Auth::user();
+        $user = User::find($userget->id);
+            if ($validator->fails()) { 
+            return response()->json(['error'=>$validator->errors()], 401);            
+            }
+            else {
+                $user->firebasetoken = $request->input('token');
+                $user->save();
+                return response()->json(['message' => 'Firebase Token Changed', 'success' => $user], $this-> successStatus); 
+            }
+
+    } 
+
+    public function resetToken(Request $request) 
+    { 
+        $userget = Auth::user();
+        $user = User::findOrFail($userget->id);
+                $user->firebasetoken = "";
+                $user->save();
+                return response()->json(['message' => 'Firebase Token Changed', 'success' => $user], $this-> successStatus); 
+            
 
     } 
 }

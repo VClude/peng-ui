@@ -16,10 +16,15 @@ Route::get('/api/ssologin', 'LoginssoController@login');
 Route::get('/ssologout', 'LoginssoController@logout');
 Route::get('image', 'ImageController@index');
 Route::post('save', 'ImageController@save');
-Route::get('/', function () {
+Route::get('/', function () {	
+	$user = auth()->user();
 	if(Auth::guest()){
     	return view('welcome');
-	}else{
+	}
+	else if($user->ticketit_admin == 0 && $user->ticketit_agent == 0){
+		return view('unauth');
+	}
+	else{
 		return redirect('/home');
 	}
 });
@@ -30,5 +35,5 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', function(){
-	return redirect(action('\Kordy\Ticketit\Controllers\TicketsController@index'));
+	return redirect(action('\Kordy\Ticketit\Controllers\DashboardController@index'));
 });

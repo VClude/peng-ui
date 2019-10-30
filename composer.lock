@@ -1,11 +1,197 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b3e265b5f2c82e60e77dface3781587f",
+    "content-hash": "9d627f3d34dab24d42fdd80763413534",
     "packages": [
+        {
+            "name": "benwilkins/laravel-fcm-notification",
+            "version": "v4.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/benwilkins/laravel-fcm-notification.git",
+                "reference": "381da9cf67abaf65b121348e6b36cd8da9e2850a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/benwilkins/laravel-fcm-notification/zipball/381da9cf67abaf65b121348e6b36cd8da9e2850a",
+                "reference": "381da9cf67abaf65b121348e6b36cd8da9e2850a",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "^6.2",
+                "illuminate/config": "~5.3|^6.0",
+                "illuminate/notifications": "~5.3|^6.0",
+                "illuminate/queue": "~5.3|^6.0",
+                "illuminate/support": "~5.3|^6.0",
+                "php": ">=5.6.4"
+            },
+            "require-dev": {
+                "mockery/mockery": "~1.0",
+                "phpunit/phpunit": "~6.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Benwilkins\\FCM\\FcmNotificationServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Benwilkins\\FCM\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ben Wilkins",
+                    "email": "bentwilkins@gmail.com"
+                }
+            ],
+            "description": "Laravel FCM (Firebase Cloud Messaging) Notification Channel",
+            "keywords": [
+                "FCM",
+                "firebase",
+                "laravel",
+                "notifications"
+            ],
+            "time": "2019-09-18T13:59:28+00:00"
+        },
+        {
+            "name": "brozot/laravel-fcm",
+            "version": "v1.2.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/brozot/Laravel-FCM.git",
+                "reference": "418dc96ede3b44acca73b2b2c60f83159f21bb79"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/brozot/Laravel-FCM/zipball/418dc96ede3b44acca73b2b2c60f83159f21bb79",
+                "reference": "418dc96ede3b44acca73b2b2c60f83159f21bb79",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "~6.0",
+                "illuminate/support": "5.*",
+                "monolog/monolog": "^1.19",
+                "php": ">=5.5.9"
+            },
+            "require-dev": {
+                "laravel/laravel": "5.2.*",
+                "mockery/mockery": "0.9.*",
+                "phpunit/phpunit": "4.7.*",
+                "satooshi/php-coveralls": "dev-master"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "LaravelFCM\\FCMServiceProvider"
+                    ],
+                    "aliases": {
+                        "FCM": "LaravelFCM\\Facades\\FCM",
+                        "FCMGroup": "LaravelFCM\\Facades\\FCMGroup"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "LaravelFCM\\": "src/",
+                    "LaravelFCM\\Mocks\\": "tests/mocks"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nicolas Brosy",
+                    "email": "nicolas.brosy@gmail.com"
+                }
+            ],
+            "description": "Laravel / Lumen package for Firebase Cloud Messaging ",
+            "keywords": [
+                "FCM",
+                "Firebase Cloud Messaging",
+                "firebase",
+                "laravel",
+                "lumen",
+                "notification",
+                "push"
+            ],
+            "time": "2019-08-07T06:27:39+00:00"
+        },
+        {
+            "name": "danielme85/laravel-log-to-db",
+            "version": "v2.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/danielme85/laravel-log-to-db.git",
+                "reference": "bd9da3a7dc565111e4d2e12359f279634cb76658"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/danielme85/laravel-log-to-db/zipball/bd9da3a7dc565111e4d2e12359f279634cb76658",
+                "reference": "bd9da3a7dc565111e4d2e12359f279634cb76658",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": ">=5.6",
+                "php": ">=7.1"
+            },
+            "require-dev": {
+                "jenssegers/mongodb": ">=3.4",
+                "mockery/mockery": "^1.0",
+                "orchestra/testbench": ">=3.7"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "danielme85\\LaravelLogToDB\\ServiceProvider"
+                    ],
+                    "aliases": {
+                        "LogToDB": "danielme85\\LaravelLogToDB\\LogToDB"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "danielme85\\LaravelLogToDB\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Daniel Mellum",
+                    "email": "mellum@gmail.com"
+                }
+            ],
+            "description": "Custom Larvel 5.6+ Log channel handler that can store log events to SQL or MongoDB databases. Uses Laravel native logging functionality.",
+            "keywords": [
+                "database",
+                "db",
+                "laravel",
+                "log",
+                "logging",
+                "mongodb",
+                "mysql",
+                "sql"
+            ],
+            "time": "2019-10-11T17:57:18+00:00"
+        },
         {
             "name": "defuse/php-encryption",
             "version": "v2.2.1",
