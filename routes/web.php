@@ -11,6 +11,7 @@
 |
 */
 // Route::get('/api/keluhan/all', 'AllpiController@laporanall');
+Route::group(['middleware' => ['web', 'activity']], function () {
 Route::get('/ssologin', 'LoginssoController@index');
 Route::get('/api/ssologin', 'LoginssoController@login');
 Route::get('/ssologout', 'LoginssoController@logout');
@@ -19,7 +20,7 @@ Route::post('save', 'ImageController@save');
 Route::get('/', function () {	
 	$user = auth()->user();
 	if(Auth::guest()){
-    	return view('welcome');
+    	return view('auth.login');
 	}
 	else if($user->ticketit_admin == 0 && $user->ticketit_agent == 0){
 		return view('unauth');
@@ -36,4 +37,5 @@ Auth::routes();
 
 Route::get('/home', function(){
 	return redirect(action('\Kordy\Ticketit\Controllers\DashboardController@index'));
+});
 });

@@ -12,13 +12,20 @@ use Illuminate\Support\Facades\Auth;
 use Validator;
 use Carbon\Carbon;
 use DB;
+use Jaybizzle\CrawlerDetect\CrawlerDetect;
+use jeremykenedy\LaravelLogger\App\Http\Traits\ActivityLogger;
 class UserController extends Controller 
 {
+use ActivityLogger;
 public $successStatus = 200;/** 
      * login api 
      * 
      * @return \Illuminate\Http\Response 
      */ 
+    public function index(){
+        return response()->json(['success'=>$success], $this-> successStatus); 
+    }
+    
     public function login(){ 
         if(Auth::attempt(['email' => request('email'), 'password' => request('password')]) || Auth::attempt(['noidentitas' => request('email'), 'password' => request('password')])){ 
             $user = Auth::user(); 
@@ -32,19 +39,20 @@ public $successStatus = 200;/**
                     ['success' => $success,
                      'credentials' => $user,
                      'surveyor' => $surveyor], $this-> successStatus); 
-                     Log::alert('Manager/Surveyor ' . $user->name . ' Logged in : ' . CarbonImmutable::now());
+                     ActivityLogger::activity('Manager/Surveyor Logged in');
             }
             else{
                 return response()->json(
                     ['success' => $success,
                      'credentials' => $user], $this-> successStatus); 
-                     Log::alert('Mahasiswa ' . $user->name . ' Logged in : ' . CarbonImmutable::now());
+                     ActivityLogger::activity('Mahasiswa Logged in');
             }
 
         } 
 
         else{ 
             return response()->json(['error'=>'Unauthorized'], 401); 
+            ActivityLogger::activity("Unauthorized Access by using Email :" . request('email'));
         } 
     }
 /** 
@@ -71,6 +79,7 @@ if ($validator->fails()) {
         $success['name'] =  $user->name;
        // $success['noidentitas'] =  $user->noidentitas;
 return response()->json(['success'=>$success], $this-> successStatus); 
+ActivityLogger::activity("User Register");
     }
 /** 
      * details api 
@@ -89,7 +98,9 @@ return response()->json(['success'=>$success], $this-> successStatus);
             // return response()->json(['message' => 'Authenticated', 'success' => $user,'surveyor' => ], $this-> successStatus); 
         // }
         // else{
+            
             return response()->json(['message' => 'Authenticated', 'success' => $user, 'surveyor' => $surveyor], $this-> successStatus); 
+            ActivityLogger::activity("View User Detail");
         // }
     } 
     public function editUser(Request $request) 
@@ -120,7 +131,7 @@ return response()->json(['success'=>$success], $this-> successStatus);
         else{
             return response()->json(['message' => 'Old Password not match'], 401); 
         }
-
+        ActivityLogger::activity("Credentials Change");
     } 
 
     public function updateToken(Request $request) 
@@ -138,7 +149,7 @@ return response()->json(['success'=>$success], $this-> successStatus);
                 $user->save();
                 return response()->json(['message' => 'Firebase Token Changed', 'success' => $user], $this-> successStatus); 
             }
-
+            ActivityLogger::activity("Token Change");
     } 
 
     public function resetToken(Request $request) 

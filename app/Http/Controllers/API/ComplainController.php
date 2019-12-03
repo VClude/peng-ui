@@ -21,7 +21,8 @@ Use App\User;
 Use App\Categoryusers;
 use DB;
 use Validator;
-
+use Jaybizzle\CrawlerDetect\CrawlerDetect;
+use jeremykenedy\LaravelLogger\App\Http\Traits\ActivityLogger;
 class ComplainController extends LaravelController
 {
     use EloquentBuilderTrait;
@@ -74,7 +75,7 @@ class ComplainController extends LaravelController
     //   $asd[] = array('keluhan'=>$p, 'lampiran'=>$l);
 
     //   }
-    public function getMonthly(){
+    public function getMonthlye(){
         $categories_all = Category::all();
         $month_count = [];
         $months = ['01','02','03','04','05','06','07','08','09','10','11','12'];
@@ -131,6 +132,7 @@ class ComplainController extends LaravelController
             'results'   => $parsedData
         ]);
         // return $this->response($parsedData);
+        ActivityLogger::activity('View Own Complain');
     }
 
 
@@ -157,7 +159,7 @@ class ComplainController extends LaravelController
         $resourceOptions = $this->parseResourceOptions();
         $query = Ticket::query();
         $this->applyResourceOptions($query, $resourceOptions);
-        if($user->ticketit_agent && !$user->ticketit_admin){
+        if($user->ticketit_agent){
 
 
 
@@ -226,17 +228,19 @@ class ComplainController extends LaravelController
         $resourceOptions = $this->parseResourceOptions();
         $query = Ticket::query();
         $this->applyResourceOptions($query, $resourceOptions);
-        $ticket = $query->findOrFail($id);
+        $ticket = $query->select('*', \DB::raw('UNIX_TIMESTAMP(created_at) AS createdunix, UNIX_TIMESTAMP(updated_at) AS updatedunix, UNIX_TIMESTAMP(completed_at) AS completedunix'))->where('id',$id)->get();
+
+        // $ticket = $query->findOrFail($id);
         // $ticket = $this->tickets->selectRaw('*,ticketit.id as t_id')->where('ticket_id',$id)->with('gambar')->first();
         $parsedData = $this->parseData($ticket, $resourceOptions, 'ticket');
         $c2ticket = 1;
         $meta[] = array('count' => "$c2ticket", 'page_total' => "$pt", 'total' => "$cticket", 'limit' => "$limit", 'page' => "$page");
-        $surveyor = Categoryusers::where('category_id', $ticket->category_id)->with('useres')->get()->pluck('useres.firebasetoken');
+        // $surveyor = Categoryusers::where('category_id', $ticket->category_id)->with('useres')->get()->pluck('useres.firebasetoken');
         return response()->json([
             'urlimg'    => $urlgambar,
             'meta'      => $meta,
-            'results'   => $parsedData,
-            'surveyor'  => $surveyor
+            'results'   => $parsedData
+            // 'surveyor'  => $surveyor
         ]);
         // return $this->response($parsedData);
     }

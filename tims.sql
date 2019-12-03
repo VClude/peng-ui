@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.7.9
+-- version 4.9.1
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Waktu pembuatan: 09 Sep 2019 pada 02.47
--- Versi server: 10.1.31-MariaDB
--- Versi PHP: 7.2.3
+-- Host: 127.0.0.1
+-- Generation Time: Nov 22, 2019 at 04:52 PM
+-- Server version: 10.4.8-MariaDB
+-- PHP Version: 7.3.10
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -25,7 +25,7 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `images`
+-- Table structure for table `images`
 --
 
 CREATE TABLE `images` (
@@ -36,22 +36,52 @@ CREATE TABLE `images` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- --------------------------------------------------------
+
 --
--- Dumping data untuk tabel `images`
+-- Table structure for table `laravel_logger_activity`
 --
 
-INSERT INTO `images` (`id`, `ticket_id`, `image`, `created_at`, `updated_at`) VALUES
-(9, 9, '20190908215038-WeMHW9xsAtMMH40Q.jpg', '2019-09-08 14:50:38', '2019-09-08 14:50:38'),
-(10, 10, '20190908215153-4Xpu5bHdqQQuTQkI.png', '2019-09-08 14:51:52', '2019-09-08 14:51:53'),
-(11, 11, '20190908215258-p9bXZkRe3WM20ruy.png', '2019-09-08 14:52:58', '2019-09-08 14:52:58'),
-(12, 11, '20190908215258-S80qHcQZXfqw6XRm.jpg', '2019-09-08 14:52:58', '2019-09-08 14:52:58'),
-(13, 11, '20190908215259-3Jb5vL0QMaU6J5iq.jpg', '2019-09-08 14:52:59', '2019-09-08 14:52:59'),
-(14, 12, '20190909001900-H7Afd2ffftzkQgrC.png', '2019-09-08 17:19:01', '2019-09-08 17:19:01');
+CREATE TABLE `laravel_logger_activity` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `description` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `userType` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `userId` int(11) DEFAULT NULL,
+  `route` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `ipAddress` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `userAgent` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `locale` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `referer` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `methodType` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `migrations`
+-- Table structure for table `log`
+--
+
+CREATE TABLE `log` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `message` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `channel` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `level` int(11) NOT NULL DEFAULT 0,
+  `level_name` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `unix_time` int(11) NOT NULL,
+  `datetime` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `context` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `extra` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `migrations`
 --
 
 CREATE TABLE `migrations` (
@@ -61,7 +91,7 @@ CREATE TABLE `migrations` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data untuk tabel `migrations`
+-- Dumping data for table `migrations`
 --
 
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
@@ -74,12 +104,112 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (7, '2016_01_15_002617_add_htmlcontent_to_ticketit_and_comments', 2),
 (8, '2016_01_15_040207_enlarge_settings_columns', 2),
 (9, '2016_01_15_120557_add_indexes', 2),
-(10, '2019_09_08_180554_create_images_table', 3);
+(10, '2019_09_08_180554_create_images_table', 3),
+(11, '2016_06_01_000001_create_oauth_auth_codes_table', 4),
+(12, '2016_06_01_000002_create_oauth_access_tokens_table', 4),
+(13, '2016_06_01_000003_create_oauth_refresh_tokens_table', 4),
+(14, '2016_06_01_000004_create_oauth_clients_table', 4),
+(15, '2016_06_01_000005_create_oauth_personal_access_clients_table', 4),
+(16, '2017_11_04_103444_create_laravel_logger_activity_table', 5),
+(17, '2018_08_11_003343_create_log_table', 5);
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `password_resets`
+-- Table structure for table `oauth_access_tokens`
+--
+
+CREATE TABLE `oauth_access_tokens` (
+  `id` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `user_id` bigint(20) DEFAULT NULL,
+  `client_id` int(10) UNSIGNED NOT NULL,
+  `name` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `scopes` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `revoked` tinyint(1) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `expires_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `oauth_auth_codes`
+--
+
+CREATE TABLE `oauth_auth_codes` (
+  `id` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `user_id` bigint(20) NOT NULL,
+  `client_id` int(10) UNSIGNED NOT NULL,
+  `scopes` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `revoked` tinyint(1) NOT NULL,
+  `expires_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `oauth_clients`
+--
+
+CREATE TABLE `oauth_clients` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `user_id` bigint(20) DEFAULT NULL,
+  `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `secret` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `redirect` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `personal_access_client` tinyint(1) NOT NULL,
+  `password_client` tinyint(1) NOT NULL,
+  `revoked` tinyint(1) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `oauth_clients`
+--
+
+INSERT INTO `oauth_clients` (`id`, `user_id`, `name`, `secret`, `redirect`, `personal_access_client`, `password_client`, `revoked`, `created_at`, `updated_at`) VALUES
+(1, NULL, 'Pengaduan FTUI Personal Access Client', 'Gbl3uZAqsfhFMMRBhlvo8dtyy51ZBnZxswO9gYHX', 'http://localhost', 1, 0, 0, '2019-09-09 04:46:39', '2019-09-09 04:46:39'),
+(2, NULL, 'Pengaduan FTUI Password Grant Client', 'B9pCu5stjGTz8O1kawGfy6kCLLT9JHOx1it0PD38', 'http://localhost', 0, 1, 0, '2019-09-09 04:46:39', '2019-09-09 04:46:39');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `oauth_personal_access_clients`
+--
+
+CREATE TABLE `oauth_personal_access_clients` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `client_id` int(10) UNSIGNED NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `oauth_personal_access_clients`
+--
+
+INSERT INTO `oauth_personal_access_clients` (`id`, `client_id`, `created_at`, `updated_at`) VALUES
+(1, 1, '2019-09-09 04:46:39', '2019-09-09 04:46:39');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `oauth_refresh_tokens`
+--
+
+CREATE TABLE `oauth_refresh_tokens` (
+  `id` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `access_token_id` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `revoked` tinyint(1) NOT NULL,
+  `expires_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `password_resets`
 --
 
 CREATE TABLE `password_resets` (
@@ -91,16 +221,17 @@ CREATE TABLE `password_resets` (
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `ticketit`
+-- Table structure for table `ticketit`
 --
 
 CREATE TABLE `ticketit` (
   `id` int(10) UNSIGNED NOT NULL,
   `subject` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `content` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
-  `html` longtext COLLATE utf8mb4_unicode_ci,
+  `location` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `html` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `status_id` int(10) UNSIGNED NOT NULL,
-  `priority_id` int(10) UNSIGNED NOT NULL DEFAULT '1',
+  `priority_id` int(10) UNSIGNED NOT NULL DEFAULT 1,
   `user_id` int(10) UNSIGNED NOT NULL,
   `agent_id` int(10) UNSIGNED NOT NULL,
   `category_id` int(10) UNSIGNED NOT NULL,
@@ -109,28 +240,10 @@ CREATE TABLE `ticketit` (
   `completed_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data untuk tabel `ticketit`
---
-
-INSERT INTO `ticketit` (`id`, `subject`, `content`, `html`, `status_id`, `priority_id`, `user_id`, `agent_id`, `category_id`, `created_at`, `updated_at`, `completed_at`) VALUES
-(1, 'Bangku Rusak', 'ini bangku rusak', '<p>ini bangku rusak<br /></p>', 3, 1, 2, 1, 1, '2019-08-20 17:53:42', '2019-09-08 11:55:16', '2019-08-20 18:11:16'),
-(2, 'kecelakaan pecel lele', 'saya pesan pecel lele, tapi diberinya pecel ayam', '<p>saya pesan pecel lele, tapi diberinya pecel ayam<br /></p>', 2, 2, 1, 3, 5, '2019-08-20 18:26:38', '2019-09-08 11:55:37', NULL),
-(3, 'tolong', 'tolong belikan saya minum', 'tolong belikan saya minum', 2, 1, 3, 2, 4, '2019-08-21 02:51:44', '2019-08-21 02:56:10', NULL),
-(4, 'ac panas', 'kurang freon', 'kurang freon', 3, 1, 3, 1, 1, '2019-08-21 03:17:06', '2019-08-21 03:19:49', '2019-08-21 03:19:48'),
-(5, 'dsaasd', 'asddsa', '<p>asddsa<br /></p>', 1, 1, 1, 1, 1, '2019-09-08 14:06:36', '2019-09-08 14:06:36', NULL),
-(6, 'adeee', 'deaa', '<p>deaa<br /></p>', 1, 1, 1, 4, 5, '2019-09-08 14:24:04', '2019-09-08 14:24:04', NULL),
-(7, 'adeee', 'deaa', '<p>deaa<br /></p>', 1, 1, 1, 1, 5, '2019-09-08 14:35:38', '2019-09-08 14:35:38', NULL),
-(8, 'deaa', 'adee', '<p>adee<br /></p>', 1, 1, 1, 3, 1, '2019-09-08 14:44:02', '2019-09-08 14:44:02', NULL),
-(9, 'deaa', 'adee', '<p>adee<br /></p>', 1, 1, 1, 1, 1, '2019-09-08 14:50:37', '2019-09-08 14:50:37', NULL),
-(10, 'tesuto', 'asdewo', '<p>asdewo<br /></p>', 1, 1, 1, 2, 4, '2019-09-08 14:51:52', '2019-09-08 14:51:52', NULL),
-(11, 'iniitutui', 'asddewoeoi', '<p>asddewoeoi<br /></p>', 2, 1, 1, 3, 1, '2019-09-08 14:52:58', '2019-09-08 15:27:12', NULL),
-(12, 'Di kantin ada yang merokoookk', 'toloong masa di kantek ada yang ngeroko okwokwokwokw', '<p>toloong masa di kantek ada yang ngeroko okwokwokwokw<br /></p>', 1, 1, 5, 1, 4, '2019-09-08 17:18:49', '2019-09-08 17:28:05', NULL);
-
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `ticketit_audits`
+-- Table structure for table `ticketit_audits`
 --
 
 CREATE TABLE `ticketit_audits` (
@@ -145,30 +258,32 @@ CREATE TABLE `ticketit_audits` (
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `ticketit_categories`
+-- Table structure for table `ticketit_categories`
 --
 
 CREATE TABLE `ticketit_categories` (
   `id` int(10) UNSIGNED NOT NULL,
   `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `alternate` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `color` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data untuk tabel `ticketit_categories`
+-- Dumping data for table `ticketit_categories`
 --
 
-INSERT INTO `ticketit_categories` (`id`, `name`, `color`) VALUES
-(1, 'Sarana & Prasarana', '#000000'),
-(2, 'Gedung', '#0000ff'),
-(3, 'Tenaga Kependidikan', '#ff8000'),
-(4, 'Kebersihan', '#008000'),
-(5, 'Insiden', '#ff0000');
+INSERT INTO `ticketit_categories` (`id`, `name`, `alternate`, `color`) VALUES
+(1, 'FACILITIES_AND_INFRASTRUCTURE', 'Sarana dan Prasarana', '#000000'),
+(2, 'BUILDINGS', 'Bangunan', '#0000ff'),
+(3, 'HUMAN_RESOURCE', 'Tenaga Kependidikan', '#ff8000'),
+(4, 'CLEANING_AND_GARDENING', 'Kebersihan', '#008000'),
+(5, 'INCIDENT_AND_RULE_VIOLATION', 'Insiden', '#ff0000'),
+(6, 'OTHERS', 'Dan Lain Lain', '#FFFFFF');
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `ticketit_categories_users`
+-- Table structure for table `ticketit_categories_users`
 --
 
 CREATE TABLE `ticketit_categories_users` (
@@ -177,15 +292,11 @@ CREATE TABLE `ticketit_categories_users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data untuk tabel `ticketit_categories_users`
+-- Dumping data for table `ticketit_categories_users`
 --
 
 INSERT INTO `ticketit_categories_users` (`category_id`, `user_id`) VALUES
 (1, 1),
-(2, 2),
-(3, 2),
-(4, 2),
-(5, 2),
 (2, 1),
 (3, 1),
 (4, 1),
@@ -194,38 +305,32 @@ INSERT INTO `ticketit_categories_users` (`category_id`, `user_id`) VALUES
 (4, 3),
 (5, 3),
 (4, 4),
-(5, 4);
+(5, 4),
+(1, 2),
+(2, 2),
+(5, 13),
+(3, 11);
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `ticketit_comments`
+-- Table structure for table `ticketit_comments`
 --
 
 CREATE TABLE `ticketit_comments` (
   `id` int(10) UNSIGNED NOT NULL,
   `content` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
-  `html` longtext COLLATE utf8mb4_unicode_ci,
+  `html` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `user_id` int(10) UNSIGNED NOT NULL,
   `ticket_id` int(10) UNSIGNED NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data untuk tabel `ticketit_comments`
---
-
-INSERT INTO `ticketit_comments` (`id`, `content`, `html`, `user_id`, `ticket_id`, `created_at`, `updated_at`) VALUES
-(1, 'sudah saya fix gan', '<p>sudah saya fix gan<br /></p>', 1, 1, '2019-08-20 17:55:54', '2019-08-20 17:55:54'),
-(2, 'xxz', '<p>xxz<br /></p>', 1, 1, '2019-08-20 18:11:48', '2019-08-20 18:11:48'),
-(3, 'SUDAH SAYA BELIKAN PAK BOS', '<p>SUDAH SAYA BELIKAN PAK BOS<br /></p>', 2, 3, '2019-08-21 02:55:31', '2019-08-21 02:55:31'),
-(4, 'sudah.....,,', 'sudah.....,,', 1, 4, '2019-08-21 03:19:44', '2019-08-21 03:19:44');
-
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `ticketit_priorities`
+-- Table structure for table `ticketit_priorities`
 --
 
 CREATE TABLE `ticketit_priorities` (
@@ -235,7 +340,7 @@ CREATE TABLE `ticketit_priorities` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data untuk tabel `ticketit_priorities`
+-- Dumping data for table `ticketit_priorities`
 --
 
 INSERT INTO `ticketit_priorities` (`id`, `name`, `color`) VALUES
@@ -246,7 +351,7 @@ INSERT INTO `ticketit_priorities` (`id`, `name`, `color`) VALUES
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `ticketit_settings`
+-- Table structure for table `ticketit_settings`
 --
 
 CREATE TABLE `ticketit_settings` (
@@ -260,7 +365,7 @@ CREATE TABLE `ticketit_settings` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data untuk tabel `ticketit_settings`
+-- Dumping data for table `ticketit_settings`
 --
 
 INSERT INTO `ticketit_settings` (`id`, `lang`, `slug`, `value`, `default`, `created_at`, `updated_at`) VALUES
@@ -312,83 +417,143 @@ INSERT INTO `ticketit_settings` (`id`, `lang`, `slug`, `value`, `default`, `crea
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `ticketit_statuses`
+-- Table structure for table `ticketit_statuses`
 --
 
 CREATE TABLE `ticketit_statuses` (
   `id` int(10) UNSIGNED NOT NULL,
   `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `alternate` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `color` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data untuk tabel `ticketit_statuses`
+-- Dumping data for table `ticketit_statuses`
 --
 
-INSERT INTO `ticketit_statuses` (`id`, `name`, `color`) VALUES
-(1, 'Menunggu', '#000000'),
-(2, 'Diproses', '#1bb4b4'),
-(3, 'Selesai', '#68cb50'),
-(4, 'Dibuka Kembali', '#000000');
+INSERT INTO `ticketit_statuses` (`id`, `name`, `alternate`, `color`) VALUES
+(1, 'AWAITING_FOLLOWUP', 'Menunggu Konfirmasi', '#000000'),
+(2, 'IS_BEING_FOLLOWED_UP', 'Sedang Diproses', '#1bb4b4'),
+(3, 'FINISHED', 'Selesai', '#68cb50'),
+(4, 'REOPENED', 'Dibuka Kembali', '#000000');
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `users`
+-- Table structure for table `users`
 --
 
 CREATE TABLE `users` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `orgcode` varchar(191) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
+  `faculty` varchar(191) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
+  `studyprog` varchar(191) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
+  `eduprog` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `email` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `email_verified_at` timestamp NULL DEFAULT NULL,
   `identitas` enum('Mahasiswa','Staff','Dosen','Lain-Lain') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'Mahasiswa',
-  `noidentitas` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `imgurl` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `noidentitas` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `imgurl` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `password` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  `ticketit_admin` tinyint(1) NOT NULL DEFAULT '0',
-  `ticketit_agent` tinyint(1) NOT NULL DEFAULT '0'
+  `ticketit_admin` tinyint(1) NOT NULL DEFAULT 0,
+  `ticketit_agent` tinyint(1) NOT NULL DEFAULT 0,
+  `firebasetoken` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data untuk tabel `users`
+-- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `identitas`, `noidentitas`, `imgurl`, `password`, `remember_token`, `created_at`, `updated_at`, `ticketit_admin`, `ticketit_agent`) VALUES
-(1, 'Fadil Ardiansyah', 'vclude@gmail.com', NULL, 'Mahasiswa', '', '', '$2y$10$sMb3gTdE9.tV2sAVRs03H.ACLM174aFc01HPD/aNnHsexl9RMnYwa', NULL, '2019-08-20 17:20:07', '2019-09-07 21:29:41', 1, 1),
-(2, 'Bukan Fadil', 'a@a.com', NULL, 'Mahasiswa', '', '', '$2y$10$0B7gH4.css9n4VtVEcGxae8IP16t85Y6NVh8Z4piqO5maFIdMjSmy', NULL, '2019-08-20 17:53:09', '2019-09-07 21:29:41', 0, 1),
-(3, 'Haydar', 'haydar@gmail.com', NULL, 'Mahasiswa', '', '', '$2y$10$h1/bpcVa8xWQVTsViEZ1ZuSEQT8ZE2PdChFPuDIv5VEoBuqHMF5tW', NULL, '2019-08-21 02:51:18', '2019-09-07 21:29:41', 0, 1),
-(4, 'surveyor2', 'b@b.com', NULL, 'Mahasiswa', '', '', '$2y$10$3kBWZN1cFgvgK/5K.sAWAu5cQt.IrS0.EuwKBdETw.T19xWP4aJw6', NULL, '2019-09-07 21:28:35', '2019-09-07 21:29:41', 0, 1),
-(5, 'mhs1', 'mhs1@gmail.com', NULL, 'Mahasiswa', '12332112332', 'lenny.jpg', '$2y$10$JyOFnsTmsVmWEAgRmGJ4MO7/QlJYd4pKZpMs6v6K2Y4PXtgPdLUzG', NULL, '2019-09-08 16:17:17', '2019-09-08 16:17:17', 0, 0);
+INSERT INTO `users` (`id`, `name`, `orgcode`, `faculty`, `studyprog`, `eduprog`, `email`, `email_verified_at`, `identitas`, `noidentitas`, `imgurl`, `password`, `remember_token`, `created_at`, `updated_at`, `ticketit_admin`, `ticketit_agent`, `firebasetoken`) VALUES
+(1, 'Fadil', NULL, NULL, 'Teknik CCIT', NULL, 'vclude@gmail.com', NULL, 'Mahasiswa', '09091999', '', '$2y$10$lHKSLyNmvCCRbWoq2JK47.0ZJRDlajtEVBsoVeLGJ5UIpyKGrudpi', NULL, '2019-08-20 17:20:07', '2019-11-20 21:16:53', 1, 1, NULL),
+(2, 'Bukan Fadil', NULL, NULL, NULL, NULL, 'a@a.com', NULL, 'Mahasiswa', '', '', '$2y$10$0B7gH4.css9n4VtVEcGxae8IP16t85Y6NVh8Z4piqO5maFIdMjSmy', NULL, '2019-08-20 17:53:09', '2019-11-20 21:16:53', 0, 1, ''),
+(3, 'Haydar', NULL, NULL, NULL, NULL, 'haydar@gmail.com', NULL, 'Mahasiswa', '', '', '$2y$10$h1/bpcVa8xWQVTsViEZ1ZuSEQT8ZE2PdChFPuDIv5VEoBuqHMF5tW', NULL, '2019-08-21 02:51:18', '2019-11-20 21:16:53', 0, 1, ''),
+(4, 'surveyor2', NULL, NULL, NULL, NULL, 'b@b.com', NULL, 'Mahasiswa', '', '', '$2y$10$3kBWZN1cFgvgK/5K.sAWAu5cQt.IrS0.EuwKBdETw.T19xWP4aJw6', NULL, '2019-09-07 21:28:35', '2019-11-20 21:16:53', 0, 1, ''),
+(5, 'mhs1', NULL, NULL, NULL, NULL, 'mhs1@gmail.com', NULL, 'Mahasiswa', '12332112332', 'lenny.jpg', '$2y$10$JyOFnsTmsVmWEAgRmGJ4MO7/QlJYd4pKZpMs6v6K2Y4PXtgPdLUzG', NULL, '2019-09-08 16:17:17', '2019-09-08 16:17:17', 0, 0, ''),
+(6, 'Fpdel', NULL, NULL, NULL, NULL, 'fdel@asd.com', NULL, 'Mahasiswa', NULL, NULL, '$2y$10$IwIEopfZ1ZaXYeSjqm.xzuj2AG61Z32bT/.AWogzfDUaURlSqrMZa', NULL, '2019-09-17 06:43:41', '2019-09-17 06:43:41', 0, 0, ''),
+(7, 'Muhammad Farhan Hanif', NULL, NULL, NULL, NULL, 'cv2lex@gmail.com', NULL, 'Mahasiswa', '1231234123', NULL, '$2y$10$e0OfP3tO/UEUJaOvX9YEou2sS.3KyEzb3rjn7oECwRXdbFhDy.uzK', NULL, '2019-09-17 09:54:04', '2019-11-21 02:52:32', 0, 0, 'esMKGXhDhUs:APA91bFeZW1SgNkxCseh4PbaLu-1bwEBaWIlUtnxMzlTsP5lsIE6fuLici1TwUkDbl8gxRAktUeT_TgBwbMNKMyJYlzFJ2Dgq3ZX2IbgqrHZD_g48xA_R_g9hBsTgmElRDo_SEHIC4ZM'),
+(8, 'Indah Ayu Yuliani', NULL, NULL, NULL, NULL, 'Indah.ayu@gmail.com', NULL, 'Mahasiswa', '1231234123', NULL, '$2y$10$xXQ29JHDoeLQVWOB.Rw15.KqMe2DVlIUCOFlY.KVxshNahak6E6.O', NULL, '2019-10-17 07:26:55', '2019-10-17 07:26:55', 0, 0, ''),
+(9, 'Mahasiswa01', NULL, NULL, NULL, NULL, 'Mahasiswa01@ui.ac.id', NULL, 'Mahasiswa', '1710010120', NULL, '$2y$10$7GzgUxgub92A2ASxvAqiq.A6NcZ.SS4uONpUJdw7FS2vvenH0pau.', NULL, '2019-11-20 20:23:07', '2019-11-20 20:23:07', 0, 0, NULL),
+(10, 'Mahasiswa02', NULL, NULL, NULL, NULL, 'Mahasiswa02@ui.ac.id', NULL, 'Mahasiswa', '1710010121', NULL, '$2y$10$nKuWXaKehGW8NpxEWPSxLeb3dpIxXYXBZ.K6IVMWeizNWPrBsTCBi', NULL, '2019-11-20 20:23:56', '2019-11-20 20:23:56', 0, 0, NULL),
+(11, 'Surveyor Prasarana', NULL, NULL, NULL, NULL, 'sarpras@ui.ac.id', NULL, 'Staff', '371003040245', NULL, '$2y$10$UP98gYmqp3l6RM2Zl4xQaOy1omwnm0EwbW1OWOFHkIslW7qAoiLn.', NULL, '2019-11-20 20:25:26', '2019-11-21 03:10:54', 0, 1, 'cg6o7nhA77c:APA91bEn9MHy_RT2vthAtNdtLwyNyM2dX3UqKb3VTLB8e2OyMM78lDbWDPcOiD74owYMGM8vcawyy7hXmiRuJWgVJmvoluEOys3Z-IksYB7NSZhg60RnQhFg3ExwWaKh_Pv6njgJY2wq'),
+(12, 'Surveyor Bangunan', NULL, NULL, NULL, NULL, 'bangunan@ui.ac.id', NULL, 'Staff', '95230593046', NULL, '$2y$10$MDwFeNnhcTisB5gmfMFPbeMdUZE8zsXudoAeVlLPbltFGqN0wFPHC', NULL, '2019-11-20 21:10:39', '2019-11-21 03:05:49', 0, 1, NULL),
+(13, 'Surveyor Insiden', NULL, NULL, NULL, NULL, 'insiden@ui.ac.id', NULL, 'Staff', '9034235346', NULL, '$2y$10$PBd4golr6AChC.Q7eDs5gOjcUAEFJDQA.2D1m6SGk3wvn.XfSXwnG', NULL, '2019-11-20 21:11:59', '2019-11-21 03:10:16', 0, 1, '');
 
 --
 -- Indexes for dumped tables
 --
 
 --
--- Indeks untuk tabel `images`
+-- Indexes for table `images`
 --
 ALTER TABLE `images`
   ADD PRIMARY KEY (`id`),
   ADD KEY `ticket_id` (`ticket_id`);
 
 --
--- Indeks untuk tabel `migrations`
+-- Indexes for table `laravel_logger_activity`
+--
+ALTER TABLE `laravel_logger_activity`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `log`
+--
+ALTER TABLE `log`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `migrations`
 --
 ALTER TABLE `migrations`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indeks untuk tabel `password_resets`
+-- Indexes for table `oauth_access_tokens`
+--
+ALTER TABLE `oauth_access_tokens`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `oauth_access_tokens_user_id_index` (`user_id`);
+
+--
+-- Indexes for table `oauth_auth_codes`
+--
+ALTER TABLE `oauth_auth_codes`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `oauth_clients`
+--
+ALTER TABLE `oauth_clients`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `oauth_clients_user_id_index` (`user_id`);
+
+--
+-- Indexes for table `oauth_personal_access_clients`
+--
+ALTER TABLE `oauth_personal_access_clients`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `oauth_personal_access_clients_client_id_index` (`client_id`);
+
+--
+-- Indexes for table `oauth_refresh_tokens`
+--
+ALTER TABLE `oauth_refresh_tokens`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `oauth_refresh_tokens_access_token_id_index` (`access_token_id`);
+
+--
+-- Indexes for table `password_resets`
 --
 ALTER TABLE `password_resets`
   ADD KEY `password_resets_email_index` (`email`);
 
 --
--- Indeks untuk tabel `ticketit`
+-- Indexes for table `ticketit`
 --
 ALTER TABLE `ticketit`
   ADD PRIMARY KEY (`id`),
@@ -401,19 +566,19 @@ ALTER TABLE `ticketit`
   ADD KEY `ticketit_completed_at_index` (`completed_at`);
 
 --
--- Indeks untuk tabel `ticketit_audits`
+-- Indexes for table `ticketit_audits`
 --
 ALTER TABLE `ticketit_audits`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indeks untuk tabel `ticketit_categories`
+-- Indexes for table `ticketit_categories`
 --
 ALTER TABLE `ticketit_categories`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indeks untuk tabel `ticketit_comments`
+-- Indexes for table `ticketit_comments`
 --
 ALTER TABLE `ticketit_comments`
   ADD PRIMARY KEY (`id`),
@@ -421,13 +586,13 @@ ALTER TABLE `ticketit_comments`
   ADD KEY `ticketit_comments_ticket_id_index` (`ticket_id`);
 
 --
--- Indeks untuk tabel `ticketit_priorities`
+-- Indexes for table `ticketit_priorities`
 --
 ALTER TABLE `ticketit_priorities`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indeks untuk tabel `ticketit_settings`
+-- Indexes for table `ticketit_settings`
 --
 ALTER TABLE `ticketit_settings`
   ADD PRIMARY KEY (`id`),
@@ -437,81 +602,105 @@ ALTER TABLE `ticketit_settings`
   ADD KEY `ticketit_settings_slug_index` (`slug`);
 
 --
--- Indeks untuk tabel `ticketit_statuses`
+-- Indexes for table `ticketit_statuses`
 --
 ALTER TABLE `ticketit_statuses`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indeks untuk tabel `users`
+-- Indexes for table `users`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `users_email_unique` (`email`);
 
 --
--- AUTO_INCREMENT untuk tabel yang dibuang
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT untuk tabel `images`
+-- AUTO_INCREMENT for table `images`
 --
 ALTER TABLE `images`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT untuk tabel `migrations`
+-- AUTO_INCREMENT for table `laravel_logger_activity`
+--
+ALTER TABLE `laravel_logger_activity`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `log`
+--
+ALTER TABLE `log`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
--- AUTO_INCREMENT untuk tabel `ticketit`
+-- AUTO_INCREMENT for table `oauth_clients`
+--
+ALTER TABLE `oauth_clients`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `oauth_personal_access_clients`
+--
+ALTER TABLE `oauth_personal_access_clients`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `ticketit`
 --
 ALTER TABLE `ticketit`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT untuk tabel `ticketit_audits`
+-- AUTO_INCREMENT for table `ticketit_audits`
 --
 ALTER TABLE `ticketit_audits`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT untuk tabel `ticketit_categories`
+-- AUTO_INCREMENT for table `ticketit_categories`
 --
 ALTER TABLE `ticketit_categories`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
--- AUTO_INCREMENT untuk tabel `ticketit_comments`
+-- AUTO_INCREMENT for table `ticketit_comments`
 --
 ALTER TABLE `ticketit_comments`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT untuk tabel `ticketit_priorities`
+-- AUTO_INCREMENT for table `ticketit_priorities`
 --
 ALTER TABLE `ticketit_priorities`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT untuk tabel `ticketit_settings`
+-- AUTO_INCREMENT for table `ticketit_settings`
 --
 ALTER TABLE `ticketit_settings`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
 
 --
--- AUTO_INCREMENT untuk tabel `ticketit_statuses`
+-- AUTO_INCREMENT for table `ticketit_statuses`
 --
 ALTER TABLE `ticketit_statuses`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT untuk tabel `users`
+-- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
