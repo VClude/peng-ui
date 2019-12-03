@@ -1,6 +1,24 @@
 @extends('layouts.app')
 
 @section('page', __('Login'))
+@section('css_content')
+
+<link rel="stylesheet" type="text/css" href="{{ asset('/FTUIM-Admin/resources/css/styles.css') }}">
+
+	<link rel="stylesheet" type="text/css" href="{{ asset('/FTUIM-Admin/pages/login/vendor/animate/animate.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ asset('/FTUIM-Admin/resources/css/font-import.css') }}">
+
+	<link rel="stylesheet" type="text/css" href="{{ asset('/FTUIM-Admin/pages/login/vendor/css-hamburgers/hamburgers.min.css') }}">
+
+	<link rel="stylesheet" type="text/css" href="{{ asset('/FTUIM-Admin/pages/login/vendor/animsition/css/animsition.min.css') }}">
+
+	<link rel="stylesheet" type="text/css" href="{{ asset('/FTUIM-Admin/pages/login/vendor/select2/select2.min.css') }}">
+	
+	<link rel="stylesheet" type="text/css" href="{{ asset('/FTUIM-Admin/pages/login/vendor/daterangepicker/daterangepicker.css') }}">
+
+	<link rel="stylesheet" type="text/css" href="{{ asset('/FTUIM-Admin/pages/login/css/util.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ asset('/FTUIM-Admin/pages/login/css/main.css') }}">
+@endsection
 
 @section('auth_content')
 <div class="limiter">
@@ -66,4 +84,16 @@
 		</div>
 	</div>
 
+@endsection
+
+@section('js_content')
+	<script src="{{ asset('/FTUIM-Admin/pages/login/vendor/jquery/jquery-3.2.1.min.js') }}"></script>
+	<script src="{{ asset('/FTUIM-Admin/pages/login/vendor/animsition/js/animsition.min.js') }}"></script>
+	<script src="{{ asset('/FTUIM-Admin/pages/login/vendor/bootstrap/js/popper.js') }}"></script>
+	<script src="{{ asset('/FTUIM-Admin/pages/login/vendor/bootstrap/js/bootstrap.min.js') }}"></script>
+	<script src="{{ asset('/FTUIM-Admin/pages/login/vendor/select2/select2.min.js') }}"></script>
+	<script src="{{ asset('/FTUIM-Admin/pages/login/vendor/daterangepicker/moment.min.js') }}"></script>
+	<script src="{{ asset('/FTUIM-Admin/pages/login/vendor/daterangepicker/daterangepicker.js') }}"></script>
+	<script src="{{ asset('/FTUIM-Admin/pages/login/vendor/countdowntime/countdowntime.js') }}"></script>
+	<script src="{{ asset('/FTUIM-Admin/pages/login/js/main.js') }}"></script>
 @endsection

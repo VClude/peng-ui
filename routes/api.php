@@ -12,6 +12,8 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+
 Route::post('plogin', 'API\UserController@login');
 Route::post('pregister', 'API\UserController@register');
 // Route::middleware('auth:api')->get('/user', function (Request $request) {
@@ -19,11 +21,11 @@ Route::post('pregister', 'API\UserController@register');
 // });
 
 
-
-
+Route::group(['middleware' => ['activity']], function(){
 Route::get('status', 'API\ComplainController@getStatus');
-Route::get('monthly', 'API\ComplainController@getMonthly');
-Route::group(['middleware' => 'auth:api'], function(){
+Route::get('monthly', 'API\ComplainController@getMonthlye');
+});
+Route::group(['middleware' => ['auth:api','activity']], function(){
     Route::get('kategori', 'API\ComplainController@getCategory');
     //keluhan section
     Route::post('keluhan', '\Kordy\Ticketit\Controllers\TicketsController@jsonstore');
@@ -40,6 +42,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     // Route::get('keluhan/all', 'API\ComplainController@laporanall');
     Route::get('myaccount', 'API\UserController@details');
     Route::post('updateToken', 'API\UserController@updateToken');
+    Route::post('resetToken', 'API\UserController@resetToken');
     Route::put('myaccount', 'API\UserController@editUser');
     // Route::get('/amialive', function () {
     //     return ['data' => 'yes you are']; //check if token valid

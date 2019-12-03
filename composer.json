@@ -10,11 +10,15 @@
         "brozot/laravel-fcm": "^1.2",
         "danielme85/laravel-log-to-db": "^2.0",
         "fideloper/proxy": "^4.0",
+        "grimthorr/laravel-toast": "^1.1",
+        "jaybizzle/crawler-detect": "1.*",
+        "jeremykenedy/laravel-logger": "^3.0",
         "kordy/ticketit": "^0.4",
         "laravel/framework": "5.8.*",
         "laravel/passport": "^7.4",
         "laravel/tinker": "^1.0",
         "optimus/bruno": "~3.0",
+        "pusher/pusher-php-server": "~3.0",
         "ristek/sso": "*"
     },
     "require-dev": {

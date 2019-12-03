@@ -66,13 +66,34 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'identitas' => $data['identity'],
-            'noidentitas' => $data['identityno'],
-            'imgurl' => $data['image'],
-            'password' => Hash::make($data['password']),
-        ]);
+        if ($image = request()->file('image')) {
+            foreach ($image as $files) {
+            $imeg = new Image();
+            $destinationPath = public_path().'/images/user';
+            $profileImage = date('YmdHis') . "-" . Str::random(16) . "." . $files->getClientOriginalExtension();
+            $files->move($destinationPath, $profileImage);
+
+            return User::create([
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'identitas' => $data['identity'],
+                'noidentitas' => $data['identityno'],
+                'imgurl' => $profileImage,
+                'password' => Hash::make($data['password']),
+            ]);
+        }
+        }
+        else{
+            
+            return User::create([
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'identitas' => $data['identity'],
+                'noidentitas' => $data['identityno'],
+                'imgurl' => $data['image'],
+                'password' => Hash::make($data['password']),
+            ]);
+        }
+
     }
 }
