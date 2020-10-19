@@ -25,11 +25,12 @@ Route::group(['middleware' => ['activity']], function(){
 Route::get('status', 'API\ComplainController@getStatus');
 Route::get('monthly', 'API\ComplainController@getMonthlye');
 });
-Route::group(['middleware' => ['auth:api','activity']], function(){
+Route::group(['middleware' => ['activity']], function(){
     Route::get('kategori', 'API\ComplainController@getCategory');
     //keluhan section
     Route::post('keluhan', '\Kordy\Ticketit\Controllers\TicketsController@jsonstore');
     Route::get('keluhan', 'API\ComplainController@getComplain');
+    Route::get('keluhan/search/{text}', 'API\ComplainController@searchComplain');
     Route::get('mykeluhan', 'API\ComplainController@getMine');
     Route::get('keluhan/{id}', 'API\ComplainController@showComplain');
     Route::get('keluhan/process/{id}', '\Kordy\Ticketit\Controllers\TicketsController@jsonProses');

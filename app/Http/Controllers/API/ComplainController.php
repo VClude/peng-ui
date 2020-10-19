@@ -139,7 +139,7 @@ class ComplainController extends LaravelController
 
     public function getComplain()
     {
-        $user = Auth::user();
+        // $user = Auth::user();
         // $user = User::find($userget->id);
         $limit = Input::get('limit');
         $page = Input::get('page');
@@ -159,23 +159,23 @@ class ComplainController extends LaravelController
         $resourceOptions = $this->parseResourceOptions();
         $query = Ticket::query();
         $this->applyResourceOptions($query, $resourceOptions);
-        if($user->ticketit_agent){
+        // if($user->ticketit_agent){
 
 
 
-            $ticketa = Categoryusers::where('user_id',$user->id)->pluck('category_id');
-            $tticket = Ticket::whereIn('category_id',$ticketa)->orderBy('created_at', 'DESC')->get();
-            $ticket = $query->select('*', \DB::raw('UNIX_TIMESTAMP(created_at) AS createdunix, UNIX_TIMESTAMP(updated_at) AS updatedunix, UNIX_TIMESTAMP(completed_at) AS completedunix'))->whereIn('category_id',$ticketa)->orderBy('created_at', 'DESC')->get();
+        //     $ticketa = Categoryusers::where('user_id',$user->id)->pluck('category_id');
+        //     $tticket = Ticket::whereIn('category_id',$ticketa)->orderBy('id', 'ASC')->get();
+        //     $ticket = $query->select('*', \DB::raw('UNIX_TIMESTAMP(created_at) AS createdunix, UNIX_TIMESTAMP(updated_at) AS updatedunix, UNIX_TIMESTAMP(completed_at) AS completedunix'))->whereIn('category_id',$ticketa)->orderBy('id', 'ASC')->get();
 
-            $str = 'ticket';
-            // $ticket = $query->select('*', \DB::raw('UNIX_TIMESTAMP(created_at) AS createdunix, UNIX_TIMESTAMP(updated_at) AS updatedunix, UNIX_TIMESTAMP(completed_at) AS completedunix'))->with('tickets')->orderBy('ticketit.created_at', 'DESC')->get();
+        //     $str = 'ticket';
+        //     // $ticket = $query->select('*', \DB::raw('UNIX_TIMESTAMP(created_at) AS createdunix, UNIX_TIMESTAMP(updated_at) AS updatedunix, UNIX_TIMESTAMP(completed_at) AS completedunix'))->with('tickets')->orderBy('ticketit.created_at', 'DESC')->get();
         
-        }
-        else{
+        // }
+        // else{
         $tticket = Ticket::get();
-        $ticket = $query->select('*', \DB::raw('UNIX_TIMESTAMP(created_at) AS createdunix, UNIX_TIMESTAMP(updated_at) AS updatedunix, UNIX_TIMESTAMP(completed_at) AS completedunix'))->orderBy('created_at', 'DESC')->get();
+        $ticket = $query->select('*', \DB::raw('UNIX_TIMESTAMP(created_at) AS createdunix, UNIX_TIMESTAMP(updated_at) AS updatedunix, UNIX_TIMESTAMP(completed_at) AS completedunix'))->orderBy('id', 'ASC')->get();
         $str = 'ticket';
-        }
+        // }
         $cticket = count($tticket);
         $urlgambar = url('/') . '/images/';
         $bsd = array('urlgambar'=>$urlgambar);
@@ -244,6 +244,54 @@ class ComplainController extends LaravelController
         ]);
         // return $this->response($parsedData);
     }
+
+
+    public function searchComplain($txt)
+    {
+        
+        $limit = Input::get('limit');
+        $page = Input::get('page');
+        if($limit == null){
+            $limit = 100;
+        }
+        if($page == null){
+            $page = 1;
+        }
+        // elseif($page == 0){
+        //     $page = 1;
+        // }
+        // else{
+        //     $page++;
+        // }
+    
+        $cticket = 1;
+        $urlgambar = url('/') . '/images/';
+        $bsd = array('urlgambar'=>$urlgambar);
+
+        $pt = ceil($cticket/$limit);
+        // $pagetotal = number_format($pt, ((int) $pt == $pt ? 0 : 2), '.', ',');
+
+        $resourceOptions = $this->parseResourceOptions();
+        $query = Ticket::query();
+        $this->applyResourceOptions($query, $resourceOptions);
+        $ticket = $query->select('*', \DB::raw('UNIX_TIMESTAMP(created_at) AS createdunix, UNIX_TIMESTAMP(updated_at) AS updatedunix, UNIX_TIMESTAMP(completed_at) AS completedunix'))->where('pemerian', 'LIKE','%' . $txt . '%')->get();
+
+        // $ticket = $query->findOrFail($id);
+        // $ticket = $this->tickets->selectRaw('*,ticketit.id as t_id')->where('ticket_id',$id)->with('gambar')->first();
+        $parsedData = $this->parseData($ticket, $resourceOptions, 'ticket');
+        $c2ticket = 1;
+        $meta[] = array('count' => "$c2ticket", 'page_total' => "$pt", 'total' => "$cticket", 'limit' => "$limit", 'page' => "$page");
+        // $surveyor = Categoryusers::where('category_id', $ticket->category_id)->with('useres')->get()->pluck('useres.firebasetoken');
+        return response()->json([
+            'urlimg'    => $urlgambar,
+            'meta'      => $meta,
+            'results'   => $parsedData
+            // 'surveyor'  => $surveyor
+        ]);
+        // return $this->response($parsedData);
+    }
+
+
     public function getCategory()
     {
         $resourceOptions = $this->parseResourceOptions();
